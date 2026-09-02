@@ -1,31 +1,25 @@
-from TestCaseExtended import MyTest, TestCaseTest
-from TestResult import TestResult
+from Test.Test import TestSuiteTest, TestCaseTest
+from TestFramework.TestSuite import TestSuite
+from TestFramework.TestResult import TestResult
 
 if __name__ == "__main__":
     result = TestResult()
+    suite = TestSuite()
 
-    test = TestCaseTest('test_result_success_run')
-    test.run(result)
+    suite.add_test(TestCaseTest('test_result_success_run'))
+    suite.add_test(TestCaseTest('test_result_failure_run'))
+    suite.add_test(TestCaseTest('test_result_error_run'))
+    suite.add_test(TestCaseTest('test_result_multiple_run'))
+    suite.add_test(TestCaseTest('test_was_set_up'))
+    suite.add_test(TestCaseTest('test_was_run'))
+    suite.add_test(TestCaseTest('test_was_tear_down'))
+    suite.add_test(TestCaseTest('test_template_method'))
 
-    test = TestCaseTest('test_result_failure_run')
-    test.run(result)
+    suite.add_test(TestSuiteTest('test_suite_size'))
+    suite.add_test(TestSuiteTest('test_suite_success_run'))
+    suite.add_test(TestSuiteTest('test_suite_multiple_run'))
 
-    test = TestCaseTest('test_result_error_run')
-    test.run(result)
+    suite.run(result)
 
-    test = TestCaseTest('test_result_multiple_run')
-    test.run(result)
-
-    test = TestCaseTest('test_was_set_up')
-    test.run(result)
-
-    test = TestCaseTest('test_was_run')
-    test.run(result)
-
-    test = TestCaseTest('test_was_tear_down')
-    test.run(result)
-
-    test = TestCaseTest('test_template_method')
-    test.run(result)
 
     print(result.summary())

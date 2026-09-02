@@ -1,35 +1,38 @@
-from TestCase import TestCase
-from TestResult import TestResult
+from TestFramework.TestCase import TestCase
+from TestFramework.TestSuite import TestSuite
+from TestFramework.TestResult import TestResult
+from Test.Components.TestCaseExtended import TestStub, TestSpy
 
-class MyTest(TestCase):
+class TestSuiteTest(TestCase):
 
-    def set_up(self):
-        print('set_up')
+    def test_suite_size(self):
+        suite = TestSuite()
 
-    def tear_down(self):
-        print('tear_down')
+        suite.add_test(TestStub('test_success'))
+        suite.add_test(TestStub('test_failure'))
+        suite.add_test(TestStub('test_error'))
 
-    def test_a(self):
-        print('test_a')
+        assert len(suite.tests) == 3
 
-    def test_b(self):
-        print('test_b')
+    def test_suite_success_run(self):
+        result = TestResult()
+        suite = TestSuite()
+        suite.add_test(TestStub('test_success'))
 
-    def test_c(self):
-        print('test_c')
+        suite.run(result)
 
+        assert result.summary() == '1 run, 0 failed, 0 error'
 
-class TestStub(TestCase):
+    def test_suite_multiple_run(self):
+        result = TestResult()
+        suite = TestSuite()
+        suite.add_test(TestStub('test_success'))
+        suite.add_test(TestStub('test_failure'))
+        suite.add_test(TestStub('test_error'))
 
-    def test_success(self):
-        assert True
+        suite.run(result)
 
-    def test_failure(self):
-        assert False
-
-    def test_error(self):
-        raise Exception
-    
+        assert result.summary() == '3 run, 1 failed, 1 error'
 
 class TestCaseTest(TestCase):
 
@@ -79,24 +82,3 @@ class TestCaseTest(TestCase):
         spy = TestSpy('test_method')
         spy.run(self.result)
         assert spy.log == "set_up test_method tear_down"
-
-class TestSpy(TestCase):
-
-    def __init__(self, name):
-        TestCase.__init__(self, name)
-        self.was_run = False
-        self.was_set_up = False
-        self.was_tear_down = False
-        self.log = ""
-
-    def set_up(self):
-        self.was_set_up = True
-        self.log += "set_up "
-
-    def test_method(self):
-        self.was_run = True
-        self.log += "test_method "
-
-    def tear_down(self):
-        self.was_tear_down = True
-        self.log += "tear_down"
