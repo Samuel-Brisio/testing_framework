@@ -1,4 +1,5 @@
 from TestCase import TestCase
+from TestResult import TestResult
 
 class MyTest(TestCase):
 
@@ -16,3 +17,5 @@ class MyTest(TestCase):
 
     def test_c(self):
         print('test_c')
+
+    
